@@ -16,13 +16,13 @@
 ;; The top level type, which includes everything else, is 't'
 
 (define-test test-check-some-common-types
-   (true-or-false? ___  (typep "hello" 'string))
-   (true-or-false? ___  (typep "hello" 'array))
-   (true-or-false? ___  (typep "hello" 'list))
-   (true-or-false? ___  (typep "hello" '(simple-array character (5))))
+   (true-or-false? t  (typep "hello" 'string))
+   (true-or-false? t  (typep "hello" 'array))
+   (true-or-false? nil  (typep "hello" 'list))
+   (true-or-false? t  (typep "hello" '(simple-array character (5))))
 
-   (true-or-false? ___  (typep '(1 2 3) 'list))
-   (true-or-false? ___  (typep 99 'integer))
+   (true-or-false? t  (typep '(1 2 3) 'list))
+   (true-or-false? t  (typep 99 'integer))
    (true-or-false? ___  (typep nil 'NULL))
    (true-or-false? ___  (typep 22/7 'ratio))
    (true-or-false? ___  (typep 4.0 'float))

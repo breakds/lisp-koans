@@ -50,8 +50,22 @@
 ; Your goal is to write the score method.
 
 (defun score (dice)
-  ; You need to write this method
-)
+  (labels ((defc (score-3 &optional (score-1 0))
+             (let ((count 0))
+               (lambda (act)
+                 (case act
+                   (:add (incf count))
+                   (:get (+ (* (floor (/ count 3)) score-3)
+                            (* (mod count 3) score-1))))))))
+    (let* ((func-list (list (defc 0) (defc 1000 100) (defc 200) (defc 300)
+                            (defc 400) (defc 500 50) (defc 600)))
+           (funs (make-array 7 :initial-contents func-list)))
+      (loop for i in dice
+         do (funcall (aref funs i) :add))
+      (loop for fun across funs
+         sum (funcall fun :get)))))
+
+
 
 (define-test test-score-of-an-empty-list-is-zero
     (assert-equal 0 (score nil)))
