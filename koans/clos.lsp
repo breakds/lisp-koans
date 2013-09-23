@@ -70,7 +70,7 @@
       ; check that we can set and read the value
       (set-value 33 x)
       (assert-equal 33 (get-value x))
-      (assert-equal 2 (how-many-value-queries x))))
+      (assert-equal 3 (how-many-value-queries x))))
 
 
 ; countdowner has a value which goes down every time you look at it
@@ -83,7 +83,7 @@
 ;; you may be interested in the 'decf function.
 (defmethod get-value ((object countdowner))
   (let ((res (decf (slot-value object 'value))))
-    (if (zerop res)
+    (if (<= res 0)
 	"bang"
 	res)))
 
@@ -115,7 +115,7 @@
       (set-kind :circle circle-1)
       (set-pos '(3 4) circle-1)
       (set-radius 5 circle-1)
-      (assert-equal '(3 4)_ (get-pos circle-1))
+      (assert-equal '(3 4) (get-pos circle-1))
       (assert-equal 5 (get-radius circle-1))))
 
 ;; Classes may also inherit from more than one base class.
@@ -141,8 +141,8 @@
 (define-test test-multiple-inheritance
     (let ((my-colored-circle (make-instance 'colored-circle))
           (my-circled-color (make-instance 'circled-color)))
-      (assert-equal :default-shape-kind (get-kind my-colored-circle))
-      (assert-equal :default-color-kind (get-kind my-circled-color))))
+      (assert-equal :default-color-kind (get-kind my-colored-circle))
+      (assert-equal :default-shape-kind (get-kind my-circled-color))))
 
 
 (defvar *last-kind-accessor* nil)
@@ -168,15 +168,15 @@
           (my-circle (make-instance 'circle))
           (my-color (make-instance 'color)))
       (get-kind my-shape)
-      (assert-equal :default-shape-kind *last-kind-accessor*)
+      (assert-equal :shape *last-kind-accessor*)
       (get-kind my-circle)
-      (assert-equal :default-shape-kind *last-kind-accessor*)
+      (assert-equal :circle *last-kind-accessor*)
       (get-kind my-color)
-      (assert-equal :default-color-kind *last-kind-accessor*)
+      (assert-equal :color *last-kind-accessor*)
       (get-kind my-colored-circle)
-      (assert-equal :default-shape-kind *last-kind-accessor*)
+      (assert-equal :color *last-kind-accessor*)
       (get-kind my-circled-color)
-      (assert-equal :default-color-kind *last-kind-accessor*)))
+      (assert-equal :circle *last-kind-accessor*)))
 
 
 ;; Todo: consider adding :before and :after method control instructions.
